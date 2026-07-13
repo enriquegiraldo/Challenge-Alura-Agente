@@ -727,7 +727,7 @@ Ejecuta 5 escenarios representativos:
 Desarrollado como parte del **Challenge Alura Agente** (Oracle Next Education + Alura Latam).
 
 - GitHub: [EnriqueGiraldo](https://github.com/enriquegiraldo)
-- Repositorio: [aurora-rag-agent](https://github.com/tu-usuario/aurora-rag-agent)
+- Repositorio: [aurora-rag-agent](https://github.com/enriquegiraldo/Challenge-Alura-Agente)
 
 > Reemplaza `tu-usuario` por tu usuario real de GitHub antes de publicar.
 
