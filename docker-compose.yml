@@ -1,0 +1,40 @@
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Aurora RAG Agent — Docker Compose (desarrollo local)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+services:
+  aurora-rag:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aurora-rag-dev
+    ports:
+      - "8501:8501"
+    volumes:
+      # Montar .env para que la app lea las claves
+      - ./.env:/app/.env:ro
+      # Montar storage como volumen nombrado (persiste el índice FAISS entre restarts)
+      - aurora-vectorstore:/app/storage/vectorstore
+      # Montar data/ para actualizar PDFs sin rebuild
+      - ./data/documents:/app/data/documents:ro
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
+      - CHAT_MODEL=${CHAT_MODEL:-gemini-1.5-flash-latest}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-models/text-embedding-004}
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE:-es}
+      - SIMILARITY_THRESHOLD=${SIMILARITY_THRESHOLD:-0.50}
+      - TOP_K=${TOP_K:-4}
+      - CHUNK_SIZE=${CHUNK_SIZE:-1000}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-200}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  aurora-vectorstore:
+    name: aurora-rag-vectorstore

@@ -1,0 +1,55 @@
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Aurora RAG Agent — .dockerignore
+# Reduce el contexto de build para acelerar docker compose build.
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Secrets (se montan como volume en runtime)
+.env
+.env.local
+
+# Vectorstore local (se regenera dentro del container o se monta como volume)
+storage/vectorstore/*
+!storage/vectorstore/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Git
+.git/
+.gitignore
+
+# Streamlit cache
+.streamlit/
+
+# Docker meta
+Dockerfile
+docker-compose*.yml
+
+# Docs no necesarias en runtime
+README.md
+LICENSE
+assets/

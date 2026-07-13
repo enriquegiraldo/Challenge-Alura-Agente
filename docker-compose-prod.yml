@@ -1,0 +1,52 @@
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Aurora RAG Agent — Docker Compose (PRODUCCIÓN en OCI Always Free)
+# Optimizado para instancias ARM (Ampere A1) con 1-4 GB de RAM.
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+services:
+  aurora-rag:
+    # En producción se recomienda cargar la imagen pre-construida desde un tar
+    # (evita construir en la VM limitada de OCI). Para construir en CI/CD,
+    # descomenta `build` y comenta `image`.
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: aurora-rag:latest
+    container_name: aurora-rag-prod
+    ports:
+      - "127.0.0.1:8501:8501"  # Solo localhost — Nginx hace proxy público
+    volumes:
+      - ./.env:/app/.env:ro
+      - aurora-vectorstore-prod:/app/storage/vectorstore
+      - ./data/documents:/app/data/documents:ro
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - TAVILY_API_KEY=${TAVILY_API_KEY}
+      - CHAT_MODEL=${CHAT_MODEL:-gemini-1.5-flash-latest}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-models/text-embedding-004}
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE:-es}
+      - SIMILARITY_THRESHOLD=${SIMILARITY_THRESHOLD:-0.50}
+      - TOP_K=${TOP_K:-4}
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+        reservations:
+          memory: 512M
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  aurora-vectorstore-prod:
+    name: aurora-rag-vectorstore-prod

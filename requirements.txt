@@ -1,0 +1,28 @@
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Aurora RAG Agent — Dependencias de desarrollo
+# Testeado con Python 3.11+. Compatible con OCI Always Free (ARM64).
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ── UI ──────────────────────────────────────────────────────────────────────
+streamlit>=1.38,<2.0
+
+# ── LLM + Orquestación ──────────────────────────────────────────────────────
+langchain>=0.3,<0.4
+langchain-core>=0.3,<0.4
+langchain-google-genai>=2.0,<3.0
+langchain-community>=0.3,<0.4
+langgraph>=0.2,<0.3
+
+# ── Vector store + Embeddings ───────────────────────────────────────────────
+faiss-cpu>=1.8,<2.0
+
+# ── PDF parsing ─────────────────────────────────────────────────────────────
+pypdf>=5.0,<6.0
+
+# ── Web search (gate determinista) ──────────────────────────────────────────
+tavily-python>=0.5,<1.0
+
+# ── Config + utils ──────────────────────────────────────────────────────────
+pydantic-settings>=2.4,<3.0
+python-dotenv>=1.0,<2.0
+rich>=13.7,<14.0
